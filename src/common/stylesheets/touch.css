@@ -1,0 +1,19 @@
+.no-select {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.touch {
+    -webkit-font-smoothing: antialiased;
+}
+
+.touch .touch-scroll {
+    -webkit-overflow-scrolling: touch;
+}
+
+.touch input, .touch textarea {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
