@@ -15,6 +15,7 @@ var rename = require('gulp-rename');
 var userref = require('gulp-useref');
 var uglify = require('gulp-uglify');
 var minify = require('gulp-minify-css');
+var imagemin = require("gulp-imagemin");
 var autoprefixer = require('gulp-autoprefixer');
 var browserSync = require('browser-sync').create();
 var runSequence = require('run-sequence');
@@ -64,6 +65,7 @@ gulp.task('style-base', function() {
 gulp.task('sass', function() {
     return sass(path.join(config.src, 'modules/**/scss/*.scss'), {base: '../', style: 'expanded'})
         .on('error', sass.logError)
+        .pipe(autoprefixer())
         .pipe(rename(function(path) {
             path.dirname = path.dirname.replace(/scss/, '/css');
         }))
@@ -95,6 +97,18 @@ gulp.task('html', ['sass'], function() {
         .pipe(browserSync.stream());
 });
 
+/* image */
+gulp.task('images', function() {
+    return gulp.src(path.join(config.src, 'images/**/**'))
+        .pipe(imagemin({
+            optimizationLevel: 5,
+            progressive: true,
+            interlaced: true,
+            multipass: true
+        }))
+        .pipe(gulp.dest(path.join(config.build, 'images')));
+});
+
 
 /** clean **/
 gulp.task("clean", function () {
@@ -102,7 +116,7 @@ gulp.task("clean", function () {
 });
 
 gulp.task("debug", function (callback) {
-    runSequence("clean", ["script", "style", "html"], callback);
+    runSequence("clean", ["script", "style", "images", "html"], callback);
 });
 
 /* watch */
